@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
+import userContext from "../context/userContext";
 
 function Login() {
-  return <div>Login</div>;
+  const user = useContext(userContext);
+
+  return (
+    <div>
+      Login
+      <h2>{user.name}</h2>
+    </div>
+  );
 }
 
 export default Login;
