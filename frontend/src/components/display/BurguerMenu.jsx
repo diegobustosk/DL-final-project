@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function BurguerMenu({ toggleOpen }) {
   return (
     <div
-      className="grid grid-rows-3 text-center bg-black md:hidden"
+      className="absolute right-0 top-16 grid grid-rows-3 text-center bg-black w-3/4 sm:w-1/2 md:w-1/ md:hidden z-10"
       onClick={toggleOpen}
     >
       <Link className="p-4" to="/">

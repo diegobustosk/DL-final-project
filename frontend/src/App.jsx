@@ -15,7 +15,7 @@ import AdminDashboard from "./components/admin/AdminDashboard";
 import UserRoute from "./components/UserRoute";
 import Profile from "./components/user/Profile";
 import Orders from "./components/user/Orders";
-import Layout from "./components/Layout";
+import Layout from "./components/display/Layout";
 
 function App() {
   return (

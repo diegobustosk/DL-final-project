@@ -1,6 +1,7 @@
 import React, { Children, useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import BurguerMenu from "./BurguerMenu";
+import Footer from "./Footer";
 
 function Layout({ children }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +15,7 @@ function Layout({ children }) {
       <Navbar toggleOpen={toggleOpen} />
       {isOpen && <BurguerMenu toggleOpen={toggleOpen} />}
       {children}
+      <Footer />
     </div>
   );
 }

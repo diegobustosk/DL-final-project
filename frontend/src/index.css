@@ -11,12 +11,33 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  margin: 0;
-  padding: 0;
 }
 html,
 body,
 #root {
   margin: 0;
   padding: 0;
+}
+
+.slick-arrow {
+  border-radius: 50%; /* Hace que el fondo sea circular */
+  width: 45px; /* Ancho de la flecha */
+  height: 45px; /* Alto de la flecha */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.slick-prev {
+  left: 10px;
+}
+
+.slick-next {
+  right: 10px;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: rgb(51, 47, 47);
 }
