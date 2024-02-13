@@ -5,7 +5,7 @@ function Login() {
   const user = useContext(userContext);
 
   return (
-    <div>
+    <div className="bg-zinc-50 text-black h-screen">
       Login
       <h2>{user.name}</h2>
     </div>

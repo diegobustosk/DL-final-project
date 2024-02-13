@@ -1,6 +1,6 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import { isAuthenticated } from "../helpers/auth";
+import { Route, redirect } from "react-router-dom";
+import isAuthenticated from "../helpers/auth";
 
 function AdminRoute({ component: Component, ...rest }) {
   return (
@@ -10,7 +10,7 @@ function AdminRoute({ component: Component, ...rest }) {
         isAuthenticated() && isAuthenticated().role === 1 ? (
           <Component {...props} />
         ) : (
-          <Redirect to="/login" />
+          <Navigate to="/login" />
         );
       }}
     />
