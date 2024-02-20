@@ -2,7 +2,7 @@ import pool from "../pg.js";
 import format from "pg-format";
 import bcrypt from "bcrypt";
 
-const createUser = async ({ firstName, lastName, email, password, role }) => {
+const createUser = async ({ firstName, lastName, email, password }) => {
   const query = format(
     "INSERT INTO Users (first_name, last_name, email, password, role) VALUES (%L, %L, %L, %L, %L) RETURNING user_id;",
     firstName,
@@ -22,4 +22,19 @@ const findUserByEmail = async (email) => {
   return result.rows[0];
 };
 
-export { createUser, findUserByEmail };
+const findUserById = async (userId) => {
+  const query = format("SELECT * FROM Users WHERE user_id = %L", userId);
+  const result = await pool.query(query);
+  return result.rows[0];
+};
+
+const allUsers = async () => {
+  console.log("Entre");
+  const query = format(
+    "SELECT user_id, first_name, last_name, email FROM Users"
+  );
+  const result = await pool.query(query);
+  return result.rows;
+};
+
+export { createUser, findUserByEmail, findUserById, allUsers };

@@ -1,17 +1,43 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { createUser, findUserByEmail } from "../services/users/userService.js";
+import {
+  createUser,
+  findUserByEmail,
+  findUserById,
+  allUsers,
+} from "../services/users/userService.js";
 import {
   authenticateToken,
   verifyCredentials,
   verifyNewUserCredentials,
 } from "./middlewares/authenticate.js";
+import { authRole } from "./middlewares/authorization.js";
+
 const userRouter = express.Router();
 
-userRouter.get("/", verifyCredentials, authenticateToken, async (req, res) => {
-  const user = await findUserByEmail(req.body.email);
-  res.json(user);
+userRouter.get(
+  "/all",
+  authenticateToken,
+  authRole("admin"),
+  async (req, res) => {
+    const users = await allUsers();
+    res.json(users);
+  }
+);
+
+userRouter.get("/:id", authenticateToken, async (req, res) => {
+  const userId = req.params.id;
+  if (req.user.user_id !== userId && req.user.role !== "admin") {
+    return res.status(403).send("Access denied");
+  }
+
+  try {
+    const user = await findUserById(userId);
+    res.json(user);
+  } catch (error) {
+    res.status(500).send("Server Error");
+  }
 });
 
 userRouter.post("/register", verifyNewUserCredentials, async (req, res) => {
@@ -27,7 +53,7 @@ userRouter.post("/register", verifyNewUserCredentials, async (req, res) => {
   }
 });
 
-userRouter.post("/login", async (req, res) => {
+userRouter.post("/login", verifyCredentials, async (req, res) => {
   const user = await findUserByEmail(req.body.email);
   if (!user) {
     return res.status(400).send("Cant find user");
