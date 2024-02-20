@@ -1,33 +1,45 @@
 import express from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { createUser, findUserByEmail } from "../services/users/userService.js";
+import {
+  authenticateToken,
+  verifyCredentials,
+  verifyNewUserCredentials,
+} from "./middlewares/authenticate.js";
+const userRouter = express.Router();
 
-const router = express.Router();
-
-router.get("/", (req, res) => {
-  // Logica para obtener usuarios
-  res.json({ users: [] });
+userRouter.get("/", verifyCredentials, authenticateToken, async (req, res) => {
+  const user = await findUserByEmail(req.body.email);
+  res.json(user);
 });
 
-router.post("/", async (req, res) => {
+userRouter.post("/register", verifyNewUserCredentials, async (req, res) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    // Logica para crear un usuario
-    res.status(201).send();
-  } catch {
-    res.status(500).send();
+    const user = await createUser(req.body);
+    const accessToken = jwt.sign(
+      { userId: user.user_id },
+      process.env.JWT_SECRET
+    );
+    res.json({ accessToken });
+  } catch (error) {
+    res.status(500).send("Server Error");
   }
 });
 
-router.post("/login", async (req, res) => {
-  // Buscar en BD
-  const user = users.find((user) => user.email === req.body.email);
-  if (user === null) {
+userRouter.post("/login", async (req, res) => {
+  const user = await findUserByEmail(req.body.email);
+  if (!user) {
     return res.status(400).send("Cant find user");
   }
 
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
-      res.send("Success");
+      const accessToken = jwt.sign(
+        { userId: user.user_id },
+        process.env.JWT_SECRET
+      );
+      res.json({ accessToken });
     } else {
       res.send("Not Allowed");
     }
@@ -36,4 +48,4 @@ router.post("/login", async (req, res) => {
   }
 });
 
-export default router;
+export default userRouter;
