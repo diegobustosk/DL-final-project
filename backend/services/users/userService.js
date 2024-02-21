@@ -29,7 +29,6 @@ const findUserById = async (userId) => {
 };
 
 const allUsers = async () => {
-  console.log("Entre");
   const query = format(
     "SELECT user_id, first_name, last_name, email FROM Users"
   );
@@ -37,4 +36,9 @@ const allUsers = async () => {
   return result.rows;
 };
 
-export { createUser, findUserByEmail, findUserById, allUsers };
+const deleteUser = async (userId) => {
+  const query = format("DELETE FROM Users WHERE user_id = %L", userId);
+  await pool.query(query);
+};
+
+export { createUser, findUserByEmail, findUserById, allUsers, deleteUser };

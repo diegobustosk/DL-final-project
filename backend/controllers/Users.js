@@ -6,6 +6,7 @@ import {
   findUserByEmail,
   findUserById,
   allUsers,
+  deleteUser,
 } from "../services/users/userService.js";
 import {
   authenticateToken,
@@ -47,7 +48,7 @@ userRouter.post("/register", verifyNewUserCredentials, async (req, res) => {
       { userId: user.user_id },
       process.env.JWT_SECRET
     );
-    res.json({ accessToken });
+    res.status(201).json({ accessToken });
   } catch (error) {
     res.status(500).send("Server Error");
   }
@@ -65,12 +66,27 @@ userRouter.post("/login", verifyCredentials, async (req, res) => {
         { userId: user.user_id },
         process.env.JWT_SECRET
       );
-      res.json({ accessToken });
+      res.json({ user_id: user.user_id, accessToken });
     } else {
       res.send("Not Allowed");
     }
   } catch {
     res.status(500).send();
+  }
+});
+
+userRouter.delete("/:id", authenticateToken, async (req, res) => {
+  const userIdToDelete = req.params.id;
+
+  if (req.user.user_id !== userIdToDelete && req.user.role !== "admin") {
+    return res.status(403).send("Access Denied");
+  }
+
+  try {
+    await deleteUser(userIdToDelete);
+    res.status(200).send("User deleted successfully");
+  } catch (error) {
+    res.status(500).send("Server Error");
   }
 });
 
