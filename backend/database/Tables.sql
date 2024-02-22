@@ -57,12 +57,21 @@ CREATE TABLE OrderDetails (
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
 
-CREATE TABLE Carts ( 
+CREATE TABLE Carts (
     cart_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID,
-    product_id UUID,
+    user_id UUID UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+CREATE TABLE CartDetails (
+    detail_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    cart_id UUID NOT NULL,
+    product_id UUID NOT NULL,
     quantity INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cart_id) REFERENCES Carts(cart_id),
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
 

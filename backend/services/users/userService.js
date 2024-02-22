@@ -41,4 +41,22 @@ const deleteUser = async (userId) => {
   await pool.query(query);
 };
 
-export { createUser, findUserByEmail, findUserById, allUsers, deleteUser };
+const updateUser = async (userId, { firstName, lastName, email }) => {
+  const query = format(
+    "UPDATE Users SET first_name = %L, last_name = %L, email = %L WHERE user_id = %L",
+    firstName,
+    lastName,
+    email,
+    userId
+  );
+  await pool.query(query);
+};
+
+export {
+  createUser,
+  findUserByEmail,
+  findUserById,
+  allUsers,
+  deleteUser,
+  updateUser,
+};

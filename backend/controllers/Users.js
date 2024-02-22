@@ -7,6 +7,7 @@ import {
   findUserById,
   allUsers,
   deleteUser,
+  updateUser,
 } from "../services/users/userService.js";
 import {
   authenticateToken,
@@ -36,6 +37,22 @@ userRouter.get("/:id", authenticateToken, async (req, res) => {
   try {
     const user = await findUserById(userId);
     res.json(user);
+  } catch (error) {
+    res.status(500).send("Server Error");
+  }
+});
+
+userRouter.put("/:id", authenticateToken, async (req, res) => {
+  const { id } = req.params;
+  const { firstName, lastName, email } = req.body;
+
+  if (req.user.user_id !== id && req.user.role !== "admin") {
+    return res.status(403).send("Access Denied");
+  }
+
+  try {
+    await updateUser(id, { firstName, lastName, email });
+    res.status(200).send("User updated successfully");
   } catch (error) {
     res.status(500).send("Server Error");
   }

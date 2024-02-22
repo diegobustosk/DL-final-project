@@ -50,6 +50,27 @@ describe("User Router", () => {
     });
   });
 
+  describe("PUT /users/:id", () => {
+    it("should update the user if requested by the same user or an admin", async () => {
+      const loginRes = await request(app).post("/users/login").send({
+        email: "test@example.com",
+        password: "password123",
+      });
+
+      const accessToken = loginRes.body.accessToken;
+      const res = await request(app)
+        .put(`/users/${createdUserId}`)
+        .set("Authorization", `Bearer ${accessToken}`)
+        .send({
+          firstName: "UpdatedFirstName",
+          lastName: "UpdatedLastName",
+          email: "updated@example.com",
+        });
+
+      expect(res.statusCode).toEqual(200);
+    });
+  });
+
   describe("DELETE /users/:id", () => {
     it("should delete the user if requested by the same user", async () => {
       console.log("Created User ID:", createdUserId);
