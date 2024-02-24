@@ -1,7 +1,17 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import userContext from "../../context/userContext";
 
 function Navbar({ toggleOpen }) {
+
+  const { user, setUser } = useContext(userContext);
+  const navigate = useNavigate();
+
+
+  const handleLogout = () => {
+    setUser(null); 
+    navigate('/');  
+  };
   return (
     <nav className="bg-black w-full flex justify-between items-center h-16 text-white realtive shadow-sm">
       <Link className="px-24 md:px-16 sm:px-8" to="/">
@@ -30,23 +40,54 @@ function Navbar({ toggleOpen }) {
       </div>
 
       <div className=" pr-8 hidden  md:block">
-        <Link className="p-4" to="/">
+        <Link className="p-4|
+          hover:underline 
+          hover:text-lg 
+          hover:duration-300 
+          cursor-pointer" to="/">
           Home
         </Link>
-        <Link className="p-4" to="/products">
+        <Link className="p-4
+        hover:underline 
+        hover:text-lg 
+        hover:duration-300 
+        cursor-pointer" to="/products">
           Products
         </Link>
-        <Link className="p-4" to="/contact">
+        <Link className="p-4
+        hover:underline 
+        hover:text-lg 
+        hover:duration-300 
+        cursor-pointer" to="/contact">
           Contact
         </Link>
       </div>
       <div className=" pr-8 hidden  md:block">
-        <Link className="p-4" to="/login">
-          Login
-        </Link>
-        <Link className="p-4" to="/register">
-          Register
-        </Link>
+        {user ? (
+          <>
+            <span className="p-4 text-gray-400">{user.user_name} {user.lastName}</span>
+            <Link className="p-4" onClick={handleLogout}>Logout</Link>
+            {user.user_role === 'admin' && (
+              <Link className="p-4 text-white
+              hover:underline 
+          hover:text-lg 
+          hover:duration-300 
+          cursor-pointer" to="/admin/dashboard">Admin Dashboard</Link>
+            )}
+          </>
+          
+        ) : (
+          <>
+            <Link className="p-4 hover:underline 
+          hover:text-lg 
+          hover:duration-300 
+          cursor-pointer" to="/login">Login</Link>
+            <Link className="p-4 hover:underline 
+          hover:text-lg 
+          hover:duration-300 
+          cursor-pointer" to="/register">Register</Link>
+          </>
+        )}
       </div>
     </nav>
   );

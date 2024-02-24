@@ -18,9 +18,12 @@ import Orders from "./components/user/Orders";
 import Layout from "./components/display/Layout";
 
 function App() {
+  
+  const [user, setUser] = useState(null)
+
   return (
     <>
-      <userContext.Provider value={{ name: "Diego" }}>
+      <userContext.Provider value={{ user, setUser}}>
         <BrowserRouter>
           <Layout>
             <Routes>

@@ -65,8 +65,18 @@ userRouter.post("/register", verifyNewUserCredentials, async (req, res) => {
       { userId: user.user_id },
       process.env.JWT_SECRET
     );
-    res.status(201).json({ accessToken });
+    res.status(201).json({
+      user_id: user.user_id,
+      user_name: user.first_name,
+      user_lastname: user.last_name,
+      user_role: user.role,
+      accessToken,
+    });
   } catch (error) {
+    if (error.message === "Email already exists") {
+      return res.status(409).send("Email already in use");
+    }
+    console.error(error);
     res.status(500).send("Server Error");
   }
 });
@@ -83,7 +93,13 @@ userRouter.post("/login", verifyCredentials, async (req, res) => {
         { userId: user.user_id },
         process.env.JWT_SECRET
       );
-      res.json({ user_id: user.user_id, accessToken });
+      res.json({
+        user_id: user.user_id,
+        user_name: user.first_name,
+        user_lastname: user.last_name,
+        user_role: user.role,
+        accessToken,
+      });
     } else {
       res.send("Not Allowed");
     }

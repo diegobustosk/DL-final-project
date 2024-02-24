@@ -3,17 +3,25 @@ import format from "pg-format";
 import bcrypt from "bcrypt";
 
 const createUser = async ({ firstName, lastName, email, password }) => {
-  const query = format(
-    "INSERT INTO Users (first_name, last_name, email, password, role) VALUES (%L, %L, %L, %L, %L) RETURNING user_id;",
-    firstName,
-    lastName,
-    email,
-    await bcrypt.hash(password, 10),
-    "user"
-  );
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const query = format(
+      "INSERT INTO Users (first_name, last_name, email, password, role) VALUES (%L, %L, %L, %L, %L) RETURNING user_id, first_name, last_name, email, role;",
+      firstName,
+      lastName,
+      email,
+      hashedPassword,
+      "user"
+    );
 
-  const result = await pool.query(query);
-  return result.rows[0];
+    const result = await pool.query(query);
+    return result.rows[0]; // This will return the inserted user's details
+  } catch (error) {
+    if (error.code === "23505") {
+      throw new Error("Email already exists");
+    }
+    throw error;
+  }
 };
 
 const findUserByEmail = async (email) => {
