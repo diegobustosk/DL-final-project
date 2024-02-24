@@ -23,6 +23,7 @@ CREATE TABLE Products (
     price DECIMAL(10, 2) NOT NULL,
     stock INT,
     category_id INT,
+    primary_img_url TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES Categories(category_id)
 );
