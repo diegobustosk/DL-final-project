@@ -7,14 +7,16 @@ const createProduct = async ({
   price,
   stock,
   categoryId,
+  primary_img_url,
 }) => {
   const query = format(
-    "INSERT INTO Products (product_name, description, price, stock, category_id) VALUES (%L, %L, %L, %L, %L) RETURNING product_id;",
+    "INSERT INTO Products (product_name, description, price, stock, category_id, primary_img_url) VALUES (%L, %L, %L, %L, %L, %L) RETURNING product_id;",
     productName,
     description,
     price,
     stock,
-    categoryId
+    categoryId,
+    primary_img_url
   );
 
   const result = await pool.query(query);

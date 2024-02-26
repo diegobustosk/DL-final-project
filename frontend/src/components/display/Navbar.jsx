@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import userContext from "../../context/userContext";
 
@@ -8,15 +8,21 @@ function Navbar({ toggleOpen }) {
   const navigate = useNavigate();
 
 
+
   const handleLogout = () => {
-    setUser(null); 
-    navigate('/');  
+    setUser(null);
+    navigate('/');
   };
+
+  const navigateToProfile = () => {
+    navigate('/user');
+  };
+
   return (
     <nav className="bg-black w-full flex justify-between items-center h-16 text-white realtive shadow-sm">
       <Link className="px-24 md:px-16 sm:px-8" to="/">
         <img
-          src="../../public/logo.png"
+          src="../../logo.png"
           alt="Logo"
           className=" h-16 w-16 rounded-full"
         />
@@ -54,28 +60,24 @@ function Navbar({ toggleOpen }) {
         cursor-pointer" to="/products">
           Products
         </Link>
-        <Link className="p-4
-        hover:underline 
-        hover:text-lg 
-        hover:duration-300 
-        cursor-pointer" to="/contact">
-          Contact
-        </Link>
       </div>
       <div className=" pr-8 hidden  md:block">
         {user ? (
           <>
-            <span className="p-4 text-gray-400">{user.user_name} {user.lastName}</span>
+            <span onClick={navigateToProfile} className="p-4 text-gray-400 cursor-pointer">
+              {user.user_name}
+            </span>
             <Link className="p-4" onClick={handleLogout}>Logout</Link>
+
+
             {user.user_role === 'admin' && (
               <Link className="p-4 text-white
-              hover:underline 
-          hover:text-lg 
-          hover:duration-300 
-          cursor-pointer" to="/admin/dashboard">Admin Dashboard</Link>
-            )}
-          </>
-          
+                    hover:underline 
+                hover:text-lg 
+                hover:duration-300 
+                cursor-pointer" to="/admin/createproduct">Create Product</Link>
+                  )}
+                </>        
         ) : (
           <>
             <Link className="p-4 hover:underline 

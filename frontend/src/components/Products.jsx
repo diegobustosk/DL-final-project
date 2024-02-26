@@ -10,74 +10,32 @@ function Products() {
     setSelectedProduct(product);
   };
 
+  
   useEffect(() => {
-    setProducts([
-      {
-        id: 1,
-        name: "Camiseta Blanca",
-        price: 19.99,
-        imageUrl:
-          "https://images.pexels.com/photos/428340/pexels-photo-428340.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      },
-      {
-        id: 2,
-        name: "Pantalón Denim",
-        price: 39.99,
-        imageUrl:
-          "https://images.pexels.com/photos/428340/pexels-photo-428340.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      },
-      {
-        id: 3,
-        name: "Gorra de Béisbol",
-        price: 14.99,
-        imageUrl:
-          "https://images.pexels.com/photos/428340/pexels-photo-428340.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      },
-      {
-        id: 4,
-        name: "Sudadera Gris",
-        price: 29.99,
-        imageUrl:
-          "https://images.pexels.com/photos/428340/pexels-photo-428340.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      },
-      {
-        id: 5,
-        name: "Zapatillas Deportivas",
-        price: 49.99,
-        imageUrl:
-          "https://images.pexels.com/photos/428340/pexels-photo-428340.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      },
-      {
-        id: 6,
-        name: "Bolso de Mano",
-        price: 24.99,
-        imageUrl:
-          "https://images.pexels.com/photos/428340/pexels-photo-428340.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      },
-      {
-        id: 7,
-        name: "Reloj Elegante",
-        price: 59.99,
-        imageUrl:
-          "https://images.pexels.com/photos/428340/pexels-photo-428340.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      },
-      {
-        id: 8,
-        name: "Cinturón de Cuero",
-        price: 15.99,
-        imageUrl:
-          "https://images.pexels.com/photos/428340/pexels-photo-428340.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      },
-    ]);
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/products');
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data);
+        } else {
+          console.error("Error al cargar productos");
+        }
+      } catch (error) {
+        console.error("Error en el servidor", error);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const filteredProducts = products.filter((product) =>
+  //   product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   return (
     <div className="container mx-auto p-4">
@@ -111,11 +69,11 @@ function Products() {
             onClick={() => handleProductClick(product)}
           >
             <img
-              src={product.imageUrl}
-              alt={product.name}
+              src={product.primary_img_url}
+              alt={product.product_name }
               className="w-full h-48 object-cover mb-2"
             />
-            <h5 className="text-lg font-bold">{product.name}</h5>
+            <h5 className="text-lg font-bold  text-black">{product.product_name}</h5>
             <p className="text-gray-600">${product.price}</p>
           </div>
         ))}

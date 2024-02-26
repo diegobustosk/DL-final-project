@@ -70,6 +70,7 @@ userRouter.post("/register", verifyNewUserCredentials, async (req, res) => {
       user_name: user.first_name,
       user_lastname: user.last_name,
       user_role: user.role,
+      user_email: user.email,
       accessToken,
     });
   } catch (error) {
@@ -98,10 +99,11 @@ userRouter.post("/login", verifyCredentials, async (req, res) => {
         user_name: user.first_name,
         user_lastname: user.last_name,
         user_role: user.role,
+        user_email: user.email,
         accessToken,
       });
     } else {
-      res.send("Not Allowed");
+      res.status(401).send("Not Allowed");
     }
   } catch {
     res.status(500).send();

@@ -12,16 +12,16 @@ function Login() {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
+
     try {
       const response = await fetch('http://localhost:3000/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-
-      const data = await response.json();
-
+      
       if (response.status === 200) {
+        const data = await response.json();
         setUser(data); 
         navigate("/");
       } else {
@@ -70,7 +70,7 @@ function Login() {
               placeholder="Password"
             />
           </div>
-
+          {error && <p className="text-red-500">{error}</p>}
           <div className="flex items-center justify-between">
             <button
               className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

@@ -34,7 +34,7 @@ function App() {
               <Route path="/product/detail" element={<ProductDetail />} />
               <Route path="/register" element={<Register />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/user" element={<UserRoute component={Profile} />} />
+              <Route path="/user" element={<Profile />} />
               <Route
                 path="/user/favorite"
                 element={<UserRoute component={Profile} />}
@@ -45,11 +45,11 @@ function App() {
               />
               <Route
                 path="/admin/createproduct"
-                element={<AdminRoute component={CreateProduct} />}
+                element={<CreateProduct/>}
               />
               <Route
                 path="/admin/admindashboard"
-                element={<AdminRoute component={AdminDashboard} />}
+                element={<AdminDashboard/>}
               />
             </Routes>
           </Layout>

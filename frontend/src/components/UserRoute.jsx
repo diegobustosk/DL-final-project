@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, redirect } from "react-router-dom";
-import isAuthenticated from "../helpers/auth";
 
 function UserRoute({ component: Component, ...rest }) {
   return (
