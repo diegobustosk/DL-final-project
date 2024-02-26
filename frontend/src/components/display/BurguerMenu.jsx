@@ -1,12 +1,17 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import userContext from "../../context/userContext";
+import { FaShoppingCart } from "react-icons/fa";
+import cartContext from "../../context/cartContext";
 
 function BurguerMenu({ toggleOpen }) {
   const { user } = useContext(userContext);
+  const {cart, setCart} = useContext(cartContext)
+  const cartQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+  
 
   return (
-    <div
+    <div 
       className="absolute right-0 top-16 grid grid-rows-3 text-center bg-black w-3/4 sm:w-1/2 md:w-1/4 md:hidden z-10"
       onClick={toggleOpen}
     >
@@ -27,6 +32,18 @@ function BurguerMenu({ toggleOpen }) {
           <Link className="p-4" to="/register">Register</Link>
         </>
       )}
+
+    
+<div className="flex justify-center items-center p-4">
+    <Link to="/cart" className="relative fill-white hover:fill-sky-400">
+        <FaShoppingCart size={25} />
+        {cartQuantity > 0 && (
+            <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                {cartQuantity}
+            </span>
+        )}
+    </Link>
+</div>
     </div>
   );
 }

@@ -1,10 +1,13 @@
 import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import userContext from "../../context/userContext";
+import cartContext from "../../context/cartContext";
+import { FaShoppingCart } from "react-icons/fa";
 
 function Navbar({ toggleOpen }) {
 
   const { user, setUser } = useContext(userContext);
+  const {cart} = useContext(cartContext)
   const navigate = useNavigate();
 
 
@@ -18,6 +21,8 @@ function Navbar({ toggleOpen }) {
     navigate('/user');
   };
 
+  const cartQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+  
   return (
     <nav className="bg-black w-full flex justify-between items-center h-16 text-white realtive shadow-sm">
       <Link className="px-24 md:px-16 sm:px-8" to="/">
@@ -61,36 +66,36 @@ function Navbar({ toggleOpen }) {
           Products
         </Link>
       </div>
-      <div className=" pr-8 hidden  md:block">
-        {user ? (
-          <>
-            <span onClick={navigateToProfile} className="p-4 text-gray-400 cursor-pointer">
-              {user.user_name}
-            </span>
-            <Link className="p-4" onClick={handleLogout}>Logout</Link>
 
-
-            {user.user_role === 'admin' && (
-              <Link className="p-4 text-white
-                    hover:underline 
-                hover:text-lg 
-                hover:duration-300 
-                cursor-pointer" to="/admin/createproduct">Create Product</Link>
-                  )}
-                </>        
-        ) : (
-          <>
-            <Link className="p-4 hover:underline 
-          hover:text-lg 
-          hover:duration-300 
-          cursor-pointer" to="/login">Login</Link>
-            <Link className="p-4 hover:underline 
-          hover:text-lg 
-          hover:duration-300 
-          cursor-pointer" to="/register">Register</Link>
-          </>
+      <div className="pr-8 hidden md:flex items-center">
+    {user ? (
+      <>
+        <span onClick={navigateToProfile} className="p-4 text-gray-400 cursor-pointer">
+          {user.user_name}
+        </span>
+        <Link className="p-4" onClick={handleLogout}>Logout</Link>
+        {user.user_role === 'admin' && (
+          <Link className="p-4 text-white hover:underline hover:text-lg hover:duration-300 cursor-pointer" to="/admin/createproduct">Create Product</Link>
         )}
-      </div>
+      </>
+    ) : (
+      <>
+        <Link className="p-4 hover:underline hover:text-lg hover:duration-300 cursor-pointer" to="/login">Login</Link>
+        <Link className="p-4 hover:underline hover:text-lg hover:duration-300 cursor-pointer" to="/register">Register</Link>
+      </>
+    )}
+
+    <Link to="/cart" className="relative fill-white hover:fill-sky-400 ml-4">
+      <FaShoppingCart size={25} />
+      {cartQuantity > 0 && (
+        <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+          {cartQuantity}
+        </span>
+      )}
+    </Link>
+  </div>
+
+      
     </nav>
   );
 }
