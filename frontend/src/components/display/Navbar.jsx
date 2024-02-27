@@ -1,13 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import userContext from "../../context/userContext";
-import cartContext from "../../context/cartContext";
+import { useCart } from "../../context/cartContext";
 import { FaShoppingCart } from "react-icons/fa";
 
 function Navbar({ toggleOpen }) {
-
   const { user, setUser } = useContext(userContext);
-  const {cart} = useContext(cartContext)
+  const { cart, addToCart, removeFromCart } = useCart();
   const navigate = useNavigate();
 
 

@@ -2,11 +2,13 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import userContext from "../../context/userContext";
 import { FaShoppingCart } from "react-icons/fa";
-import cartContext from "../../context/cartContext";
+import { useCart } from "../../context/cartContext";
+
 
 function BurguerMenu({ toggleOpen }) {
   const { user } = useContext(userContext);
-  const {cart, setCart} = useContext(cartContext)
+  const { cart } = useCart();
+  
   const cartQuantity = cart.reduce((total, item) => total + item.quantity, 0);
   
 

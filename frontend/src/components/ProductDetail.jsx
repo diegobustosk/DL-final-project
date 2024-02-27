@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import { FaHeart, FaShoppingCart } from 'react-icons/fa';
 import userContext from "../context/userContext";
-import cartContext from "../context/cartContext";
+import { useCart } from "../context/cartContext";
 
 function ProductDetail({ product, onClose }) {
   if (!product) return null;
   const { user } = useContext(userContext);
-  const {cart, setCart} = useContext(cartContext)
+  const { cart, addToCart } = useCart();
 
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -15,24 +15,7 @@ function ProductDetail({ product, onClose }) {
   };
 
   const handleAddToCart = () => {
-    // Ensure cart is initialized as an array
-    const currentCart = cart || [];
-  
-    // Check if the product is already in the cart
-    const foundIndex = currentCart.findIndex(item => item.product_id === product.product_id);
-    if (foundIndex >= 0) {
-      // If the product is already in the cart, increase its quantity
-      currentCart[foundIndex] = {
-        ...currentCart[foundIndex],
-        quantity: currentCart[foundIndex].quantity + 1
-      };
-    } else {
-      // If the product is not in the cart, add it with a quantity of 1
-      currentCart.push({ ...product, quantity: 1 });
-    }
-  
-    // Update the cart state
-    setCart(currentCart);
+    addToCart({...product, quantity:1});
     alert('Added to cart');
   };
 

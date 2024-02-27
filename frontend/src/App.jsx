@@ -6,7 +6,7 @@ import Landing from "./components/Landing";
 import Login from "./components/Login";
 import Contact from "./components/Contact";
 import userContext from "./context/userContext";
-import cartContext from "./context/cartContext";
+import { CartProvider } from "./context/cartContext";
 import ProductDetail from "./components/ProductDetail";
 import Register from "./components/Register";
 import Cart from "./components/Cart";
@@ -21,11 +21,11 @@ import Layout from "./components/display/Layout";
 function App() {
   
   const [user, setUser] = useState(null)
-  const [cart, setCart] = useState([]);
+
   return (
     <>
       <userContext.Provider value={{ user, setUser}}>
-        <cartContext.Provider value={{cart, setCart}}/>
+        <CartProvider>
           <BrowserRouter>
           <Layout>
             <Routes>
@@ -56,7 +56,7 @@ function App() {
             </Routes>
           </Layout>
         </BrowserRouter>
-        <cartContext.Provider/>
+        </CartProvider>
       </userContext.Provider>
     </>
   );
