@@ -2,16 +2,23 @@ import React, { useState, useContext } from "react";
 import { FaHeart, FaShoppingCart } from 'react-icons/fa';
 import userContext from "../context/userContext";
 import { useCart } from "../context/cartContext";
+import { useFavorites } from "../context/favoritesContext"; 
 
 function ProductDetail({ product, onClose }) {
   if (!product) return null;
   const { user } = useContext(userContext);
-  const { cart, addToCart } = useCart();
+  const { addToCart } = useCart();
+  const { favorites, addFavorite, removeFavorite, isFavorite } = useFavorites();
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const toggleFavorite = () => {
+    if (isFavorite(product.product_id)) {
+      removeFavorite(product.product_id);
+    } else {
+      addFavorite(product);
+    }
 
-  const handleFavoriteClick = () => {
-    setIsFavorite(!isFavorite);
+    console.log(favorites);
+    console.log(isFavorite(product.product_id))
   };
 
   const handleAddToCart = () => {
@@ -38,9 +45,11 @@ function ProductDetail({ product, onClose }) {
             <p className="text-gray-500">Stock: {product.stock}</p>
           </div>
           <div className="flex flex-col items-center justify-center">
-          {user && <button className={` m-1`} onClick={handleFavoriteClick}>
-            <FaHeart className={`${isFavorite ? 'fill-rose-400' : 'fill-gray-500'}`} size={20}/>
-            </button>}
+          {user && (
+            <button className={`m-1`} onClick={toggleFavorite}>
+              <FaHeart className={`${isFavorite(product.product_id) ? 'fill-rose-400' : 'fill-gray-500'}`} size={20}/>
+            </button>
+          )}
           <button className="bg-black text-white font-bold py-2 px-4 rounded hover:bg-gray-700 flex items-center mt-1" onClick={handleAddToCart}>
             <FaShoppingCart className="mr-2" /> Add to Cart
           </button>

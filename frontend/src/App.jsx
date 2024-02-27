@@ -10,13 +10,14 @@ import { CartProvider } from "./context/cartContext";
 import ProductDetail from "./components/ProductDetail";
 import Register from "./components/Register";
 import Cart from "./components/Cart";
-// import AdminRoute from "./components/AdminRoute";
 import CreateProduct from "./components/admin/CreateProduct";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import UserRoute from "./components/UserRoute";
 import Profile from "./components/user/Profile";
 import Orders from "./components/user/Orders";
+import Favorites from "./components/user/Favorites";
 import Layout from "./components/display/Layout";
+import { FavoritesProvider } from "./context/favoritesContext";
 
 function App() {
   
@@ -26,6 +27,8 @@ function App() {
     <>
       <userContext.Provider value={{ user, setUser}}>
         <CartProvider>
+          <FavoritesProvider>
+            
           <BrowserRouter>
           <Layout>
             <Routes>
@@ -38,8 +41,8 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/user" element={<Profile />} />
               <Route
-                path="/user/favorite"
-                element={<UserRoute component={Profile} />}
+                path="/user/favorites"
+                element={<Favorites/>}
               />
               <Route
                 path="/orders"
@@ -56,6 +59,7 @@ function App() {
             </Routes>
           </Layout>
         </BrowserRouter>
+        </FavoritesProvider>
         </CartProvider>
       </userContext.Provider>
     </>

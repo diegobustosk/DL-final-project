@@ -7,6 +7,16 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    setCart(storedCart);
+  }, []);
+
+  // Guardar el carrito en localStorage cuando cambie
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+
   // Función para añadir productos al carrito
   const addToCart = (productToAdd) => {
     const existingIndex = cart.findIndex((item) => item.product_id === productToAdd.product_id);

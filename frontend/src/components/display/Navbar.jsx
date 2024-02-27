@@ -2,11 +2,11 @@ import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import userContext from "../../context/userContext";
 import { useCart } from "../../context/cartContext";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaHeart } from "react-icons/fa";
 
 function Navbar({ toggleOpen }) {
   const { user, setUser } = useContext(userContext);
-  const { cart, addToCart, removeFromCart } = useCart();
+  const { cart } = useCart();
   const navigate = useNavigate();
 
 
@@ -76,6 +76,10 @@ function Navbar({ toggleOpen }) {
         {user.user_role === 'admin' && (
           <Link className="p-4 text-white hover:underline hover:text-lg hover:duration-300 cursor-pointer" to="/admin/createproduct">Create Product</Link>
         )}
+
+        <Link className="p-4 hover:underline hover:text-lg hover:duration-300 cursor-pointer" to="/user/favorites"> 
+        <FaHeart className='fill-rose-400' size={20}/>
+        </Link>
       </>
     ) : (
       <>
