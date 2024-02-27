@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import userContext from "../../context/userContext";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import { useCart } from "../../context/cartContext";
 
 
@@ -11,6 +11,10 @@ function BurguerMenu({ toggleOpen }) {
   
   const cartQuantity = cart.reduce((total, item) => total + item.quantity, 0);
   
+  const handleLogout = () => {
+    setUser(null);
+    navigate('/');
+  };
 
   return (
     <div 
@@ -23,7 +27,10 @@ function BurguerMenu({ toggleOpen }) {
 
       {user ? (
         <>
-          <Link className="p-4" onClick={() => {/* logout logic here */}}>Logout</Link>
+          <Link className="p-4" onClick={handleLogout}>Logout</Link>
+          <Link className="flex justify-center items-center p-4 hover:underline hover:text-lg hover:duration-300 cursor-pointer" to="/user/favorites"> 
+            <FaHeart className='fill-rose-400' size={20}/>
+          </Link>
           {user.user_role === 'admin' && (
             <Link className="p-4" to="/admin/createproduct">Create Product</Link>
           )}
