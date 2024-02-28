@@ -63,10 +63,20 @@ const deleteProduct = async (productId) => {
   await pool.query(query);
 };
 
+const getProductsByCategoryId = async (categoryId) => {
+  const query = format(
+    "SELECT * FROM Products WHERE category_id = %L",
+    categoryId
+  );
+  const result = await pool.query(query);
+  return result.rows;
+};
+
 export {
   createProduct,
   getProductById,
   updateProduct,
   deleteProduct,
   getAllProducts,
+  getProductsByCategoryId,
 };

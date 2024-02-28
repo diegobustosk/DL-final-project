@@ -5,6 +5,7 @@ import {
   getProductById,
   getAllProducts,
   deleteProduct,
+  getProductsByCategoryId,
 } from "../services/products/productService.js";
 import { authenticateToken } from "./middlewares/authenticate.js";
 import { authRole } from "./middlewares/authorization.js";
@@ -70,5 +71,16 @@ productRouter.delete(
     }
   }
 );
+
+productRouter.get("/category/:categoryId", async (req, res) => {
+  try {
+    const categoryId = req.params.categoryId;
+    const products = await getProductsByCategoryId(categoryId);
+    res.json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
 
 export default productRouter;

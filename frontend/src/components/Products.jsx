@@ -1,51 +1,49 @@
 import React, { useState, useEffect } from "react";
 import ProductDetail from "./ProductDetail";
+import { useLocation } from "react-router-dom";
 
 function Products() {
+  // Estados existentes
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  // Nuevo estado para manejar las categorías
+  const [categories, setCategories] = useState([]);
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const categoryIdFromQuery = queryParams.get("category");
+  // Estado para la categoría seleccionada
+  const [selectedCategory, setSelectedCategory] = useState(categoryIdFromQuery || "");
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/products');
-        if (response.ok) {
-          const data = await response.json();
-          setProducts(data);
-        } else {
-          console.error("Error al cargar productos");
-        }
-      } catch (error) {
-        console.error("Error en el servidor", error);
-      }
-    };
-
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:3000/categories');
-        if (response.ok) {
-          const data = await response.json();
-          setCategories(data);
-          console.log(data);
-        } else {
-          console.error("Error al cargar categorías");
-        }
+        const response = await fetch("http://localhost:3000/categories");
+        const data = await response.json();
+        setCategories(data);
       } catch (error) {
-        console.error("Error en el servidor", error);
+        console.error("Error fetching categories", error);
       }
     };
 
-    fetchProducts();
     fetchCategories();
   }, []);
 
-  const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
-    console.log(selectedCategory);
-  };
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const baseUrl = "http://localhost:3000/products";
+      const url = selectedCategory ? `${baseUrl}/category/${selectedCategory}` : baseUrl;
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products", error);
+      }
+    };
+    fetchProducts();
+  }, [selectedCategory]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -55,13 +53,9 @@ function Products() {
     setSelectedProduct(product);
   };
 
-  const filteredProducts = products.filter((product) =>
-    product.product_name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (selectedCategory === "" || product.category_id.toString() === selectedCategory)
-  );
-
-   return (
+  return (
     <div className="container mx-auto p-4">
+      {/* Input de búsqueda */}
       <input
         type="text"
         placeholder="Buscar productos..."
@@ -70,24 +64,26 @@ function Products() {
         onChange={handleSearch}
       />
 
+      {/* Selector de categorías */}
       <select
         className="w-full p-2 border rounded mb-4 text-black bg-white appearance-none"
         value={selectedCategory}
-        onChange={handleCategoryChange}
+        onChange={(e) => setSelectedCategory(e.target.value)}
       >
-        <option className="text-gray-600" value="">Todas las categorías</option>
+        <option className="text-black"  value="">Todas las categorías</option>
         {categories.map((category) => (
-          <option className="text-gray-600" key={category.category_id} value={category.category_id}>
+          <option className="text-black" key={category.category_id} value={category.category_id}>
             {category.name}
           </option>
         ))}
       </select>
 
+      {/* Lista de productos */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredProducts.map((product) => (
+        {products.filter((product) => product.product_name.toLowerCase().includes(searchTerm.toLowerCase())).map((product) => (
           <div
             key={product.id}
-            className="border rounded p-4 flex flex-col items-center"
+            className="border rounded p-4 flex flex-col items-center cursor-pointer"
             onClick={() => handleProductClick(product)}
           >
             <img
@@ -100,12 +96,7 @@ function Products() {
           </div>
         ))}
       </div>
-      {selectedProduct && (
-        <ProductDetail
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-        />
-      )}
+      {selectedProduct && <ProductDetail product={selectedProduct} onClose={() => setSelectedProduct(null)} />}
     </div>
   );
 }
