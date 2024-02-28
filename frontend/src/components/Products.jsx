@@ -3,8 +3,10 @@ import ProductDetail from "./ProductDetail";
 
 function Products() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -21,8 +23,29 @@ function Products() {
       }
     };
 
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/categories');
+        if (response.ok) {
+          const data = await response.json();
+          setCategories(data);
+          console.log(data);
+        } else {
+          console.error("Error al cargar categorías");
+        }
+      } catch (error) {
+        console.error("Error en el servidor", error);
+      }
+    };
+
     fetchProducts();
+    fetchCategories();
   }, []);
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+    console.log(selectedCategory);
+  };
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -33,10 +56,11 @@ function Products() {
   };
 
   const filteredProducts = products.filter((product) =>
-    product.product_name.toLowerCase().includes(searchTerm.toLowerCase())
+    product.product_name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (selectedCategory === "" || product.category_id.toString() === selectedCategory)
   );
 
-  return (
+   return (
     <div className="container mx-auto p-4">
       <input
         type="text"
@@ -45,6 +69,19 @@ function Products() {
         value={searchTerm}
         onChange={handleSearch}
       />
+
+      <select
+        className="w-full p-2 border rounded mb-4 text-black bg-white appearance-none"
+        value={selectedCategory}
+        onChange={handleCategoryChange}
+      >
+        <option className="text-gray-600" value="">Todas las categorías</option>
+        {categories.map((category) => (
+          <option className="text-gray-600" key={category.category_id} value={category.category_id}>
+            {category.name}
+          </option>
+        ))}
+      </select>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredProducts.map((product) => (
