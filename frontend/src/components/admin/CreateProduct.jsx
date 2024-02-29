@@ -1,6 +1,8 @@
 
 import React, { useState, useContext} from "react";
 import userContext from "../../context/userContext";
+const  {VITE_APP_URL} = import.meta.env
+
 
 function CreateProduct() {
 
