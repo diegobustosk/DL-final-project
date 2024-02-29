@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import userContext from "../context/userContext";
+const  {VITE_APP_URL} = import.meta.env
+
 
 function Register() {
   const { user, setUser } = useContext(userContext);
@@ -32,7 +34,7 @@ function Register() {
     }
     
     try {
-      const response = await fetch('http://localhost:3000/users/register', {
+      const response = await fetch(`${VITE_APP_URL}/users/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

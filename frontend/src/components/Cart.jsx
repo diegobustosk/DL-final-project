@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useCart } from "../context/cartContext";
 import { FaPlus, FaMinus, FaShoppingCart } from 'react-icons/fa';
-import { useNavigate } from "react-router-dom";
 
 function Cart() {
-  const navigate = useNavigate();
   const { cart, updateProductQuantity  } = useCart();
 
   const handleQuantityChange = (productId, delta) => {

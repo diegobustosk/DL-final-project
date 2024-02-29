@@ -33,7 +33,7 @@ function CreateProduct() {
     }
   
     try {
-      const response = await fetch('http://localhost:3000/products', {
+      const response = await fetch(`${VITE_APP_URL}/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

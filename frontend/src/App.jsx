@@ -4,7 +4,6 @@ import "./App.css";
 import Products from "./components/Products";
 import Landing from "./components/Landing";
 import Login from "./components/Login";
-import Contact from "./components/Contact";
 import userContext from "./context/userContext";
 import { CartProvider } from "./context/cartContext";
 import ProductDetail from "./components/ProductDetail";
@@ -18,9 +17,10 @@ import Orders from "./components/user/Orders";
 import Favorites from "./components/user/Favorites";
 import Layout from "./components/display/Layout";
 import { FavoritesProvider } from "./context/favoritesContext";
+import AboutUs from "./components/AboutUs";
+
 
 function App() {
-  
   const [user, setUser] = useState(null)
 
   return (
@@ -35,7 +35,7 @@ function App() {
               <Route path="/" element={<Landing />} />
               <Route path="/products" element={<Products />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/contact" element={<Contact />} />
+              <Route path="/about-us" element={<AboutUs />} />
               <Route path="/product/detail" element={<ProductDetail />} />
               <Route path="/register" element={<Register />} />
               <Route path="/cart" element={<Cart />} />
@@ -43,10 +43,6 @@ function App() {
               <Route
                 path="/user/favorites"
                 element={<Favorites/>}
-              />
-              <Route
-                path="/orders"
-                element={<UserRoute component={Orders} />}
               />
               <Route
                 path="/admin/createproduct"

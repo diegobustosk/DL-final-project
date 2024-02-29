@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductDetail from "./ProductDetail";
 import { useLocation } from "react-router-dom";
+const  {VITE_APP_URL} = import.meta.env
 
 function Products() {
   // Estados existentes
@@ -19,7 +20,7 @@ function Products() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:3000/categories");
+        const response = await fetch(`${VITE_APP_URL}/categories`);
         const data = await response.json();
         setCategories(data);
       } catch (error) {
@@ -32,7 +33,7 @@ function Products() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const baseUrl = "http://localhost:3000/products";
+      const baseUrl = `${VITE_APP_URL}/products`;
       const url = selectedCategory ? `${baseUrl}/category/${selectedCategory}` : baseUrl;
       try {
         const response = await fetch(url);

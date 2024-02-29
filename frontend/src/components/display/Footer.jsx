@@ -24,9 +24,9 @@ function Footer() {
           <Link className="p-2" to="/about-us">
             About Us
           </Link>
-          <Link className="p-2" to="/contact">
+          {/* <Link className="p-2" to="/contact">
             Contact
-          </Link>
+          </Link> */}
         </div>
       </div>
     </footer>
